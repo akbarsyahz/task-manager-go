@@ -26,11 +26,10 @@ func EnvSetting() (*Env, error) {
 		Host:     os.Getenv("DB_HOST"),
 		Name:     os.Getenv("DB_NAME"),
 		User:     os.Getenv("DB_USER"),
-		Pass:     os.Getenv("DB_PASSWORD"),
+		Pass:     os.Getenv("DB_PASS"),
 		SSL:      os.Getenv("DB_SSL"),
 		Timezone: os.Getenv("DB_TIMEZONE"),
 	}
-
+	
 	return env, nil
-
 }

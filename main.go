@@ -49,7 +49,7 @@ func main() {
 			})
 		})
 
-		taskCore.PATCH("/", func(ctx *gin.Context) {
+		taskCore.PUT("/", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{
 				"massage": "Success",
 			})
