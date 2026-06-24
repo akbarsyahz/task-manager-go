@@ -1,7 +1,10 @@
 package main
 
 import (
+	"net/http"
+	"taskManager/api/authn"
 	"taskManager/db"
+	"taskManager/db/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,12 +17,50 @@ func main() {
 	{
 		atuhn := api.Group("/authn")
 		atuhn.POST("/login", func(ctx *gin.Context) {
+			var formLogin authn.Login
+			if err := ctx.ShouldBind(&formLogin); err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
 			ctx.JSON(200, gin.H{
 				"massage": "Success",
+				"token": "token",
 			})
 		})
+
 		atuhn.POST("/register", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
+			var formLogin authn.Login
+			var formUser authn.UserRegister
+
+			if err := ctx.ShouldBind(&formLogin); err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			if err := ctx.ShouldBind(&formUser); err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+
+			_, errAuthn := authn.CreateUser(
+			model.User{
+				NameFirst: formUser.NameFirst,
+				NameLast: formUser.NameLast,
+				Age: formUser.Age,
+				DateOfBirth: formUser.DateOfBirth,
+				PlaceBirth: formUser.DateOfBirth,
+			},
+			model.LoginUser{
+				Username: formLogin.Username,
+				Password: formLogin.Password,
+			})
+
+			if errAuthn != nil {
+				panic(errAuthn.Error())
+			}
+			
+			ctx.JSON(201, gin.H{
 				"massage": "Success",
 			})
 		})
