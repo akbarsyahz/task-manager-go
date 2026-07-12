@@ -1,0 +1,100 @@
+basePath: /api
+definitions:
+  authn.LoginDto:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  authn.UserRegisterDto:
+    properties:
+      age:
+        type: integer
+      date_of_birth:
+        type: string
+      name_first:
+        type: string
+      name_last:
+        type: string
+      password:
+        type: string
+      place_of_birth:
+        type: string
+      username:
+        type: string
+    required:
+    - age
+    - date_of_birth
+    - name_first
+    - name_last
+    - password
+    - place_of_birth
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /authn/all-user:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: GetAlluser user
+      tags:
+      - authn
+  /authn/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/authn.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login user
+      tags:
+      - authn
+  /authn/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/authn.UserRegisterDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register user
+      tags:
+      - authn
+swagger: "2.0"

@@ -1,77 +1,36 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 	"taskManager/api/authn"
+	"taskManager/api/middleware"
 	"taskManager/db"
-	"taskManager/db/model"
+	"taskManager/docs"
+	"taskManager/src"
 
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// @BasePath /api
+//
+//nolint:funlen
 func main() {
 	db.Connection()
 	r := gin.Default()
-
+	r.Use(src.CorsConf())
+	docs.SwaggerInfo.BasePath = "/api"
 	api := r.Group("/api")
 	{
-		atuhn := api.Group("/authn")
-		atuhn.POST("/login", func(ctx *gin.Context) {
-			var formLogin authn.Login
-			if err := ctx.ShouldBind(&formLogin); err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-				return
-			}
-
-			ctx.JSON(200, gin.H{
-				"massage": "Success",
-				"token": "token",
-			})
-		})
-
-		atuhn.POST("/register", func(ctx *gin.Context) {
-			var formLogin authn.Login
-			var formUser authn.UserRegister
-
-			if err := ctx.ShouldBind(&formLogin); err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-				return
-			}
-
-			if err := ctx.ShouldBind(&formUser); err != nil {
-				ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-				return
-			}
-
-			_, errAuthn := authn.CreateUser(
-			model.User{
-				NameFirst: formUser.NameFirst,
-				NameLast: formUser.NameLast,
-				Age: formUser.Age,
-				DateOfBirth: formUser.DateOfBirth,
-				PlaceBirth: formUser.DateOfBirth,
-			},
-			model.LoginUser{
-				Username: formLogin.Username,
-				Password: formLogin.Password,
-			})
-
-			if errAuthn != nil {
-				panic(errAuthn.Error())
-			}
-			
-			ctx.JSON(201, gin.H{
-				"massage": "Success",
-			})
-		})
-
-		atuhn.GET("/user", func(ctx *gin.Context) {
-			ctx.JSON(200, gin.H{
-				"massage": "Success",
-			})
-		})
+		authnRoute := api.Group("/authn")
+		authnRoute.POST("/login", authn.LoginHandler)
+		authnRoute.POST("/register", authn.RegistrationHandler)
+		// TODO: (Akbar): I think this not proper to put in here, change it to user module itself
+		authnRoute.GET("/all-user", authn.GetAllUserHandler)
 
 		taskCore := api.Group("/task")
+		taskCore.Use(middleware.AuthMiddleware())
 		taskCore.GET("/", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{
 				"massage": "Success",
@@ -103,5 +62,10 @@ func main() {
 		})
 	}
 
-	r.Run(":8080")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	running := r.Run(":8080")
+	if running != nil {
+		panic(fmt.Errorf("not running"))
+	}
 }
