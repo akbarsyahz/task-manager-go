@@ -1,0 +1,82 @@
+version: "2"
+
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - revive
+    - ineffassign
+    - unused
+    - gocyclo
+    - gocognit
+    - funlen
+    - misspell
+    - lll
+    - dupl
+
+  settings:
+    govet:
+      enable:
+        - shadow
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    gocyclo:
+      min-complexity: 15
+    gocognit:
+      min-complexity: 20
+    lll:
+      line-length: 120
+    revive:
+      severity: warning
+      rules:
+        - name: exported
+        - name: unused-parameter
+        - name: var-naming
+    dupl:
+      threshold: 100
+    funlen:
+      lines: 80
+      statements: 40
+
+  exclusions:
+    paths:
+      - vendor
+      - bin
+      - tmp
+      - mocks
+      - ".*_mock\\.go"
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+          - gocyclo
+          - gocognit
+      - linters:
+          - lll
+        source: "^//"
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    paths:
+      - vendor
+      - bin
+      - tmp
+      - mocks
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+output:
+  sort-order:
+    - linter
+    - file
