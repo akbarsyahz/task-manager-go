@@ -10,12 +10,12 @@ import (
 // User represents a user in the system.
 type User struct {
 	helperdb.DefaultFieldUser
-	NameFirst   string    `json:"name_first"`
-	NameLast    string    `json:"name_last"`
-	Age         uint      `json:"age"`
-	DateOfBirth time.Time `json:"date_of_birth"`
-	PlaceBirth  string    `json:"place_birth"`
-	Tasks       []Task
+	NameFirst   string     `json:"name_first"`
+	NameLast    string     `json:"name_last"`
+	Age         uint       `json:"age"`
+	DateOfBirth time.Time  `json:"date_of_birth"`
+	PlaceBirth  string     `json:"place_birth"`
+	Tasks       []Task     `gorm:"foreignKey:UserID"`
 	UserRoles   []UserRole `gorm:"foreignKey:UserID"`
 }
 

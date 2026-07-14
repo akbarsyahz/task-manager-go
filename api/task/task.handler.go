@@ -73,7 +73,6 @@ func UpdateTaskHandler(ctx *gin.Context) {
 // @Tags task
 // @Accept json
 // @Produce json
-// @Param
 // @Success 200 {object} map[string]interface{}
 // @Router /task/all [get]
 // GetTaskHandler Handle Task Update
@@ -100,9 +99,9 @@ func GetTaskHandler(ctx *gin.Context) {
 // @Tags task
 // @Accept json
 // @Produce json
-// @Param
+// @Param id path string true "Task ID"
 // @Success 200 {object} map[string]interface{}
-// @Router /task/:id [get]
+// @Router /task/{id} [get]
 // GetTaskDetailHandler Handle Task Update
 func GetTaskDetailHandler(ctx *gin.Context) {
 	taskID := ctx.Query("id")
@@ -128,10 +127,9 @@ func GetTaskDetailHandler(ctx *gin.Context) {
 // @Tags task
 // @Accept json
 // @Produce json
-// @Param
+// @Param id path string true "Task ID"
 // @Success 200 {object} map[string]interface{}
-// @Router /task/:id [delete]
-// DeleteTaskDetailHandler Handle Task Delete
+// @Router /task/{id} [delete]
 func DeleteTaskDetailHandler(ctx *gin.Context) {
 	// var taskId []uuid.UUID
 	taskID := ctx.Query("id")

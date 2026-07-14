@@ -35,6 +35,39 @@ definitions:
     - place_of_birth
     - username
     type: object
+  task.CreateTaskDto:
+    properties:
+      description:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+      user_id:
+        type: string
+    required:
+    - description
+    - status
+    - title
+    - user_id
+    type: object
+  task.UpdateTaskDto:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      title:
+        description: UserID      uuid.UUID `form:"user_id" binding:"required"`
+        type: string
+    required:
+    - description
+    - id
+    - status
+    - title
+    type: object
 info:
   contact: {}
 paths:
@@ -97,4 +130,103 @@ paths:
       summary: Register user
       tags:
       - authn
+  /task/:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/task.UpdateTaskDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Task
+      tags:
+      - task
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/task.CreateTaskDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Task
+      tags:
+      - task
+  /task/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete Task
+      tags:
+      - task
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Task
+      tags:
+      - task
+  /task/all:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Task
+      tags:
+      - task
 swagger: "2.0"
