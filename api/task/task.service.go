@@ -30,7 +30,6 @@ func CreateTask(input CreateTaskDto) (string, error) {
 func UpdateTask(input UpdateTaskDto, userID uuid.UUID) (string, error) {
 	tasks := model.Task{
 		// NOTE: (akbar): userId Already input by set
-		// UserID:      input.UserID,
 		Title:       input.Title,
 		Status:      input.Status,
 		Description: input.Description,
