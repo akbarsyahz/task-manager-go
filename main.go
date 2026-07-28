@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"taskManager/api/authn"
-	"taskManager/api/middleware"
-	"taskManager/db"
-	"taskManager/docs"
-	"taskManager/src"
+
+	"github.com/akbarsyahz/task-manager-go/db"
+	"github.com/akbarsyahz/task-manager-go/docs"
+	"github.com/akbarsyahz/task-manager-go/internal/middleware"
+	"github.com/akbarsyahz/task-manager-go/src"
+
+	"github.com/akbarsyahz/task-manager-go/internal/authn"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"

@@ -3,7 +3,8 @@ package middleware
 import (
 	"net/http"
 	"strings"
-	"taskManager/api/helper-api/security"
+
+	"github.com/akbarsyahz/task-manager-go/internal/helper/security"
 
 	"github.com/gin-gonic/gin"
 )

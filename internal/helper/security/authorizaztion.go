@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	dtoM "taskManager/db/model"
-	"taskManager/envconf"
+	dtoM "github.com/akbarsyahz/task-manager-go/db/model"
+	"github.com/akbarsyahz/task-manager-go/envconf"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"

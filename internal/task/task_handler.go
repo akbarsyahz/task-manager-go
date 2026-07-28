@@ -24,7 +24,7 @@ func CreateTaskHandler(ctx *gin.Context) {
 		return
 	}
 
-	_, err := CreateTask(formTask)
+	_, err := CreateTaskService(formTask)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -51,15 +51,20 @@ func UpdateTaskHandler(ctx *gin.Context) {
 		return
 	}
 
-	userID, errUser := ctx.Get("sub")
-	if !errUser {
+	sub, exists := ctx.Get("sub")
+	if !exists {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
 
-	_, err := UpdateTask(formTask, userID.(uuid.UUID))
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	userID, ok := sub.(uuid.UUID)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user id type"})
+		return
+	}
+
+	if _, errUpdate := UpdateTaskService(formTask, userID); errUpdate != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": errUpdate.Error()})
 		return
 	}
 
@@ -77,20 +82,27 @@ func UpdateTaskHandler(ctx *gin.Context) {
 // @Router /task/all [get]
 // GetTaskHandler Handle Task Update
 func GetTaskHandler(ctx *gin.Context) {
-	userID, errUser := ctx.Get("sub")
-	if !errUser {
+	sub, exists := ctx.Get("sub")
+	if !exists {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
 
-	_, errGetTask := GetAllTask(userID.(uuid.UUID))
-	if errGetTask != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": errGetTask.Error()})
+	userID, ok := sub.(uuid.UUID)
+	if !ok {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "invalid user id type"})
 		return
 	}
 
-	ctx.JSON(200, gin.H{
-		"message": "Success",
+	tasks, err := GetAllTaskService(userID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "success",
+		"data":    tasks,
 	})
 }
 
@@ -110,7 +122,7 @@ func GetTaskDetailHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	result, err := GetTaskDetail(parsedUUID)
+	result, err := GetDetailTask(parsedUUID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -138,7 +150,7 @@ func DeleteTaskDetailHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-	result, err := DeleteTask(parsedUUID)
+	result, err := DeleteTaskService(parsedUUID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
