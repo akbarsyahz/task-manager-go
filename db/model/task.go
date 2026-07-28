@@ -1,7 +1,7 @@
 package model
 
 import (
-	helperdb "taskManager/db/model/helper-db"
+	helperdb "github.com/akbarsyahz/task-manager-go/db/model/helper-db"
 
 	"github.com/google/uuid"
 )

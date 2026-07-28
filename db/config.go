@@ -3,8 +3,8 @@ package db
 import (
 	"fmt"
 
-	"taskManager/db/model"
-	"taskManager/envconf"
+	"github.com/akbarsyahz/task-manager-go/db/model"
+	"github.com/akbarsyahz/task-manager-go/envconf"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"crypto/subtle"
 
-	dtoM "taskManager/db/model"
+	dtoM "github.com/akbarsyahz/task-manager-go/db/model"
 
 	"golang.org/x/crypto/argon2"
 )

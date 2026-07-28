@@ -2,11 +2,11 @@ package authn
 
 import (
 	"fmt"
-	repo "taskManager/api/authn/repository"
-	"taskManager/api/helper-api/security"
-	"taskManager/db"
-	dtoM "taskManager/db/model"
 	"time"
+
+	"github.com/akbarsyahz/task-manager-go/db"
+	dtoM "github.com/akbarsyahz/task-manager-go/db/model"
+	"github.com/akbarsyahz/task-manager-go/internal/helper/security"
 )
 
 // Registration for registration user
@@ -31,7 +31,7 @@ func Registration(inputUser UserRegisterDto) (string, error) {
 	user := &dtoM.User{NameFirst: inputUser.NameFirst, NameLast: inputUser.NameLast, Age: inputUser.Age, DateOfBirth: convertToValidDate, PlaceBirth: inputUser.PlaceBirth}
 	loginUser := &dtoM.LoginUser{Username: inputUser.Username, Hash: password, Salted: resultSalt}
 
-	errorCreating := repo.CreateUser(user, loginUser)
+	errorCreating := CreateUser(user, loginUser)
 	if errorCreating != nil {
 		return "Failed", fmt.Errorf("failed register user")
 	}
@@ -41,7 +41,7 @@ func Registration(inputUser UserRegisterDto) (string, error) {
 
 // Login User input username and password and return the token
 func Login(usernameInput string, passwordInput string) (string, error) {
-	user, err := repo.GetUser(usernameInput)
+	user, err := GetUser(usernameInput)
 	if err != nil {
 		return "", fmt.Errorf("failed to get user: %w", err)
 	}
@@ -51,7 +51,7 @@ func Login(usernameInput string, passwordInput string) (string, error) {
 		return "", fmt.Errorf("username or password is wrong: %w", errComparing)
 	}
 
-	profile, err := repo.GetUserProfile(user.UserID)
+	profile, err := GetUserProfile(user.UserID)
 	if err != nil {
 		return "", fmt.Errorf("failed to get profile: %w", err)
 	}

@@ -1,9 +1,10 @@
-package repositoryauthn
+package authn
 
 import (
 	"fmt"
-	"taskManager/db"
-	dtoM "taskManager/db/model"
+
+	"github.com/akbarsyahz/task-manager-go/db"
+	dtoM "github.com/akbarsyahz/task-manager-go/db/model"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"

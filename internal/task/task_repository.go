@@ -1,16 +1,17 @@
-package repository
+package task
 
 import (
 	"fmt"
-	"taskManager/db"
-	dtoM "taskManager/db/model"
+
+	"github.com/akbarsyahz/task-manager-go/db"
+	dtoM "github.com/akbarsyahz/task-manager-go/db/model"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
-// Create This using for createing Task
-func Create(input dtoM.Task) (string, error) {
+// CreateTask This using for createing Task
+func CreateTask(input dtoM.Task) (string, error) {
 	database := db.Connection()
 
 	result := database.Transaction(func(tx *gorm.DB) error {
@@ -27,8 +28,8 @@ func Create(input dtoM.Task) (string, error) {
 	return "Success", nil
 }
 
-// Update Task
-func Update(input dtoM.Task) (string, error) {
+// UpdateTask ...
+func UpdateTask(input dtoM.Task) (string, error) {
 	database := db.Connection()
 	var tasks dtoM.Task
 	task := dtoM.Task{
@@ -52,8 +53,8 @@ func Update(input dtoM.Task) (string, error) {
 	return "Success", nil
 }
 
-// Get ALL Task
-func Get(userID uuid.UUID) ([]dtoM.Task, error) {
+// GetTask ALL Task
+func GetTask(userID uuid.UUID) ([]dtoM.Task, error) {
 	database := db.Connection()
 	var tasks []dtoM.Task
 	err := database.Where("user_id = ?", userID).Find(&tasks).Error
@@ -63,8 +64,8 @@ func Get(userID uuid.UUID) ([]dtoM.Task, error) {
 	return tasks, nil
 }
 
-// GetDetail Task
-func GetDetail(_ uuid.UUID) (dtoM.Task, error) {
+// GetDetailTask Task
+func GetDetailTask(_ uuid.UUID) (dtoM.Task, error) {
 	database := db.Connection()
 	var tasks dtoM.Task
 	result := database.Find(&tasks)
@@ -74,8 +75,8 @@ func GetDetail(_ uuid.UUID) (dtoM.Task, error) {
 	return tasks, nil
 }
 
-// Delete Task
-func Delete(taskID uuid.UUID) (string, error) {
+// DeleteTask Task
+func DeleteTask(taskID uuid.UUID) (string, error) {
 	database := db.Connection()
 	var tasks dtoM.Task
 	// NOTE: (akbar): We not using condition its will delete task
